@@ -20,30 +20,54 @@ export const routes: Routes = [
           import('./features/usuarios/usuario-list').then((m) => m.UsuarioListComponent),
       },
       {
-        path: 'categorias',
+        path: 'profesores',
         loadComponent: () =>
-          import('./features/categorias/categoria-list').then((m) => m.CategoriaListComponent),
+          import('./features/profesores/profesor-list').then((m) => m.ProfesorListComponent),
       },
       {
-        path: 'productos',
+        path: 'grados',
         loadComponent: () =>
-          import('./features/productos/producto-list').then((m) => m.ProductoListComponent),
+          import('./features/grados/grado-list').then((m) => m.GradoListComponent),
       },
       {
-        path: 'pedidos',
+        path: 'estudiantes',
         loadComponent: () =>
-          import('./features/pedidos/pedido-list').then((m) => m.PedidoListComponent),
+          import('./features/estudiantes/estudiante-list').then((m) => m.EstudianteListComponent),
       },
       {
-        path: 'detalles-pedido',
+        path: 'directores',
         loadComponent: () =>
-          import('./features/detalles-pedido/detalle-pedido-list').then(
-            (m) => m.DetallePedidoListComponent,
-          ),
+          import('./features/directores/director-list').then((m) => m.DirectorListComponent),
       },
       {
-        path: 'pagos',
-        loadComponent: () => import('./features/pagos/pago-list').then((m) => m.PagoListComponent),
+        path: 'departamentos',
+        loadComponent: () =>
+          import('./features/departamentos/departamento-list').then((m) => m.DepartamentoListComponent),
+      },
+      {
+        path: 'cursos',
+        loadComponent: () =>
+          import('./features/cursos/curso-list').then((m) => m.CursoListComponent),
+      },
+      {
+        path: 'calificaciones',
+        loadComponent: () =>
+          import('./features/calificaciones/calificacion-list').then((m) => m.CalificacionListComponent),
+      },
+      {
+        path: 'aulas',
+        loadComponent: () =>
+          import('./features/aulas/aula-list').then((m) => m.AulaListComponent),
+      },
+      {
+        path: 'asistencias',
+        loadComponent: () =>
+          import('./features/asistencias/asistencia-list').then((m) => m.AsistenciaListComponent),
+      },
+      {
+        path: 'horarios',
+        loadComponent: () =>
+          import('./features/horarios/horario-list').then((m) => m.HorarioListComponent),
       },
     ],
   },
