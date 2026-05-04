@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Nueva calificación' : 'Editar calificación' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="grid">
+    <mat-form-field appearance="outline">
+      <mat-label>ID Estudiante</mat-label>
+      <input matInput type="number" formControlName="id_estudiante" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>ID Curso</mat-label>
+      <input matInput type="number" formControlName="id_curso" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Período</mat-label>
+      <input matInput formControlName="periodo" placeholder="2024-I" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Nota (0–20)</mat-label>
+      <input matInput type="number" formControlName="nota" min="0" max="20" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Observación</mat-label>
+      <textarea matInput rows="2" formControlName="observacion"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">Guardar</button>
+</mat-dialog-actions>
