@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Nuevo horario' : 'Editar horario' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="grid">
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Día</mat-label>
+      <mat-select formControlName="dia">
+        @for (d of dias; track d) {
+          <mat-option [value]="d">{{ d }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Hora Inicio</mat-label>
+      <input matInput type="time" formControlName="hora_inicio" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Hora Fin</mat-label>
+      <input matInput type="time" formControlName="hora_fin" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Aula</mat-label>
+      <input matInput formControlName="aula" />
+    </mat-form-field>
+    <mat-slide-toggle formControlName="estado" class="span-2">Activo</mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">Guardar</button>
+</mat-dialog-actions>
