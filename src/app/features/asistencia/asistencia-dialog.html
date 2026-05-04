@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Nueva asistencia' : 'Editar asistencia' }}</h2>
+<mat-dialog-content class="dialog-body">
+  <form [formGroup]="form" class="grid">
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Fecha</mat-label>
+      <input matInput type="date" formControlName="fecha" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>ID Estudiante</mat-label>
+      <input matInput type="number" formControlName="id_estudiante" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>ID Curso</mat-label>
+      <input matInput type="number" formControlName="id_curso" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Estado Asistencia</mat-label>
+      <mat-select formControlName="estado_asistencia">
+        @for (e of estados; track e) {
+          <mat-option [value]="e">{{ e }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Observación</mat-label>
+      <textarea matInput rows="2" formControlName="observacion"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">Guardar</button>
+</mat-dialog-actions>
