@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { HorarioService } from '../../core/services/horario.service';
-import { HorarioRead } from '../../models/api.models';
+import { HorarioResponse } from '../../models/api.models';
 import { HorarioDialogComponent, HorarioDialogData } from './horario-dialog';
 
 @Component({
@@ -35,11 +35,10 @@ export class HorarioListComponent implements AfterViewInit {
     'dia',
     'hora_inicio',
     'hora_fin',
-    'aula',
-    'estado',
+    'id_curso',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<HorarioRead>([]);
+  readonly dataSource = new MatTableDataSource<HorarioResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +69,7 @@ export class HorarioListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: HorarioRead): void {
+  editar(row: HorarioResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,7 +81,7 @@ export class HorarioListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: HorarioRead): void {
+  eliminar(row: HorarioResponse): void {
     if (!confirm(`¿Eliminar este horario?`)) return;
     this.svc.delete(row.id_horario).subscribe({
       next: () => {

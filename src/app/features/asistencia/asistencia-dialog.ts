@@ -10,11 +10,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { AsistenciaService } from '../../core/services/asistencia.service';
-import { AsistenciaRead } from '../../models/api.models';
+import { AsistenciaResponse } from '../../models/api.models';
 
 export interface AsistenciaDialogData {
   mode: 'create' | 'edit';
-  row?: AsistenciaRead;
+  row?: AsistenciaResponse;
 }
 
 @Component({
@@ -43,21 +43,19 @@ export class AsistenciaDialogComponent {
 
   readonly form = this.fb.nonNullable.group({
     fecha: ['', Validators.required],
-    id_estudiante: [0, [Validators.required, Validators.min(1)]],
-    id_curso: [0, [Validators.required, Validators.min(1)]],
-    estado_asistencia: ['PRESENTE', Validators.required],
-    observacion: [''],
+    id_estudiante: ['', Validators.required],
+    id_curso: ['', Validators.required],
+    estado: ['PRESENTE', Validators.required],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        fecha: r.fecha,
-        id_estudiante: r.id_estudiante,
-        id_curso: r.id_curso,
-        estado_asistencia: r.estado_asistencia,
-        observacion: r.observacion ?? '',
+        fecha: r.fecha ?? '',
+        id_estudiante: r.id_estudiante ?? '',
+        id_curso: r.id_curso ?? '',
+        estado: r.estado ?? 'PRESENTE',
       });
     }
   }
@@ -77,14 +75,14 @@ export class AsistenciaDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
           fecha: v.fecha,
           id_estudiante: v.id_estudiante,
           id_curso: v.id_curso,
-          estado_asistencia: v.estado_asistencia,
-          observacion: v.observacion || null,
+          estado: v.estado,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -94,13 +92,11 @@ export class AsistenciaDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_asistencia, {
-        fecha: v.fecha,
-        id_estudiante: v.id_estudiante,
-        id_curso: v.id_curso,
-        estado_asistencia: v.estado_asistencia,
-        observacion: v.observacion || null,
+        fecha: v.fecha || null,
+        estado: v.estado || null,
         id_usuario_edita: uid,
       })
       .subscribe({

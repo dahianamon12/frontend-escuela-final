@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { UsuarioService } from '../../core/services/usuario.service';
-import { UsuarioRead } from '../../models/api.models';
+import { UsuarioResponse } from '../../models/api.models';
 import { UsuarioDialogComponent, UsuarioDialogData } from './usuario-dialog';
 
 @Component({
@@ -33,13 +33,13 @@ export class UsuarioListComponent implements AfterViewInit {
 
   readonly displayedColumns = [
     'nombre',
-    'apellido',
+    'nombre_usuario',
     'email',
     'rol',
-    'estado',
+    'activo',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<UsuarioRead>([]);
+  readonly dataSource = new MatTableDataSource<UsuarioResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +70,7 @@ export class UsuarioListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: UsuarioRead): void {
+  editar(row: UsuarioResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,8 +82,8 @@ export class UsuarioListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: UsuarioRead): void {
-    if (!confirm(`¿Eliminar usuario ${row.nombre} ${row.apellido}?`)) return;
+  eliminar(row: UsuarioResponse): void {
+    if (!confirm(`¿Eliminar usuario ${row.nombre} (${row.nombre_usuario})?`)) return;
     this.svc.delete(row.id_usuario).subscribe({
       next: () => {
         this.snack.open('Usuario eliminado', 'OK', { duration: 3000 });

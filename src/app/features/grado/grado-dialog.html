@@ -2,22 +2,17 @@
 <mat-dialog-content class="dialog-body">
   <form [formGroup]="form" class="grid">
     <mat-form-field appearance="outline" class="span-2">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre" />
+      <mat-label>Nombre del Grado</mat-label>
+      <input matInput formControlName="nombre_grado" />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Nivel</mat-label>
       <input matInput formControlName="nivel" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Sección</mat-label>
-      <input matInput formControlName="seccion" />
+      <mat-label>Jornada</mat-label>
+      <input matInput formControlName="jornada" />
     </mat-form-field>
-    <mat-form-field appearance="outline" class="span-2">
-      <mat-label>Año Escolar</mat-label>
-      <input matInput formControlName="anio_escolar" placeholder="2024-2025-2026" />
-    </mat-form-field>
-    <mat-slide-toggle formControlName="estado" class="span-2">Activo</mat-slide-toggle>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

@@ -5,16 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { GradoService } from '../../core/services/grado.service';
-import { GradoRead } from '../../models/api.models';
+import { GradoResponse } from '../../models/api.models';
 
 export interface GradoDialogData {
   mode: 'create' | 'edit';
-  row?: GradoRead;
+  row?: GradoResponse;
 }
 
 @Component({
@@ -25,7 +24,6 @@ export interface GradoDialogData {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './grado-dialog.html',
@@ -40,22 +38,18 @@ export class GradoDialogComponent {
   readonly data = inject<GradoDialogData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.nonNullable.group({
-    nombre: ['', Validators.required],
+    nombre_grado: ['', Validators.required],
     nivel: [''],
-    seccion: [''],
-    anio_escolar: [''],
-    estado: [true],
+    jornada: [''],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        nombre: r.nombre,
+        nombre_grado: r.nombre_grado,
         nivel: r.nivel ?? '',
-        seccion: r.seccion ?? '',
-        anio_escolar: r.anio_escolar ?? '',
-        estado: r.estado,
+        jornada: r.jornada ?? '',
       });
     }
   }
@@ -75,30 +69,28 @@ export class GradoDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
-    if (this.data.mode === 'create') {
-      this.svc
-        .create({
-          nombre: v.nombre,
-          nivel: v.nivel || null,
-          seccion: v.seccion || null,
-          anio_escolar: v.anio_escolar || null,
-          estado: v.estado,
-          id_usuario_creacion: uid,
-        })
-        .subscribe({
-          next: () => this.dialogRef.close(true),
-          error: (err: HttpErrorResponse) =>
-            this.snack.open(this.msg(err), 'Cerrar', { duration: 6000 }),
-        });
-      return;
+
+  if (this.data.mode === 'create') {
+  this.svc
+    .create({
+      nombre_grado: v.nombre_grado,
+      nivel: v.nivel || '',
+      jornada: v.jornada || '',
+      id_usuario_creacion: uid,
+    })
+    .subscribe({
+      next: () => this.dialogRef.close(true),
+      error: (err: HttpErrorResponse) =>
+        this.snack.open(this.msg(err), 'Cerrar', { duration: 6000 }),
+    });
+  return;
     }
+
     this.svc
       .update(this.data.row!.id_grado, {
-        nombre: v.nombre,
+        nombre_grado: v.nombre_grado,
         nivel: v.nivel || null,
-        seccion: v.seccion || null,
-        anio_escolar: v.anio_escolar || null,
-        estado: v.estado,
+        jornada: v.jornada || null,
         id_usuario_edita: uid,
       })
       .subscribe({

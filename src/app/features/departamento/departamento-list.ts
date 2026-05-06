@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { DepartamentoService } from '../../core/services/departamento.service';
-import { DepartamentoRead } from '../../models/api.models';
+import { DepartamentoResponse } from '../../models/api.models';
 import { DepartamentoDialogComponent, DepartamentoDialogData } from './departamento-dialog';
 
 @Component({
@@ -33,12 +33,11 @@ export class DepartamentoListComponent implements AfterViewInit {
 
   readonly displayedColumns = [
     'nombre',
-    'descripcion',
-    'estado',
-    'fecha_creacion',
+    'telefono',
+    'oficina',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<DepartamentoRead>([]);
+  readonly dataSource = new MatTableDataSource<DepartamentoResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -69,7 +68,7 @@ export class DepartamentoListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: DepartamentoRead): void {
+  editar(row: DepartamentoResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -81,7 +80,7 @@ export class DepartamentoListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: DepartamentoRead): void {
+  eliminar(row: DepartamentoResponse): void {
     if (!confirm(`¿Eliminar departamento ${row.nombre}?`)) return;
     this.svc.delete(row.id_departamento).subscribe({
       next: () => {
