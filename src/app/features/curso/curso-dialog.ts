@@ -5,16 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { CursoService } from '../../core/services/curso.service';
-import { CursoRead } from '../../models/api.models';
+import { CursoResponse } from '../../models/api.models';
 
 export interface CursoDialogData {
   mode: 'create' | 'edit';
-  row?: CursoRead;
+  row?: CursoResponse;
 }
 
 @Component({
@@ -25,7 +24,6 @@ export interface CursoDialogData {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './curso-dialog.html',
@@ -40,22 +38,24 @@ export class CursoDialogComponent {
   readonly data = inject<CursoDialogData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.nonNullable.group({
-    nombre: ['', Validators.required],
-    codigo: ['', Validators.required],
+    nombre_curso: ['', Validators.required],
     descripcion: [''],
-    creditos: [0, Validators.min(0)],
-    estado: [true],
+    horas_semanales: [''],
+    id_profesor: ['', Validators.required],
+    id_grado: ['', Validators.required],
+    id_aula: ['', Validators.required],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        nombre: r.nombre,
-        codigo: r.codigo,
+        nombre_curso: r.nombre_curso,
         descripcion: r.descripcion ?? '',
-        creditos: r.creditos ?? 0,
-        estado: r.estado,
+        horas_semanales: r.horas_semanales ?? '',
+        id_profesor: r.id_profesor ?? '',
+        id_grado: r.id_grado ?? '',
+        id_aula: r.id_aula ?? '',
       });
     }
   }
@@ -75,14 +75,16 @@ export class CursoDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
-          nombre: v.nombre,
-          codigo: v.codigo,
+          nombre_curso: v.nombre_curso,
           descripcion: v.descripcion || null,
-          creditos: v.creditos,
-          estado: v.estado,
+          horas_semanales: v.horas_semanales || null,
+          id_profesor: v.id_profesor,
+          id_grado: v.id_grado,
+          id_aula: v.id_aula,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -92,13 +94,15 @@ export class CursoDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_curso, {
-        nombre: v.nombre,
-        codigo: v.codigo,
+        nombre_curso: v.nombre_curso || null,
         descripcion: v.descripcion || null,
-        creditos: v.creditos,
-        estado: v.estado,
+        horas_semanales: v.horas_semanales || null,
+        id_profesor: v.id_profesor || null,
+        id_grado: v.id_grado || null,
+        id_aula: v.id_aula || null,
         id_usuario_edita: uid,
       })
       .subscribe({

@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { AulaService } from '../../core/services/aula.service';
-import { AulaRead } from '../../models/api.models';
+import { AulaResponse } from '../../models/api.models';
 import { AulaDialogComponent, AulaDialogData } from './aula-dialog';
 
 @Component({
@@ -32,14 +32,12 @@ export class AulaListComponent implements AfterViewInit {
   private readonly snack = inject(MatSnackBar);
 
   readonly displayedColumns = [
-    'nombre',
-    'codigo',
+    'numero_aula',
     'capacidad',
-    'ubicacion',
-    'estado',
+    'edificio',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<AulaRead>([]);
+  readonly dataSource = new MatTableDataSource<AulaResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +68,7 @@ export class AulaListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: AulaRead): void {
+  editar(row: AulaResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,8 +80,8 @@ export class AulaListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: AulaRead): void {
-    if (!confirm(`¿Eliminar aula ${row.nombre}?`)) return;
+  eliminar(row: AulaResponse): void {
+    if (!confirm(`¿Eliminar aula ${row.numero_aula}?`)) return;
     this.svc.delete(row.id_aula).subscribe({
       next: () => {
         this.snack.open('Aula eliminada', 'OK', { duration: 3000 });

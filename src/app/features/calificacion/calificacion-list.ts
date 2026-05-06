@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { CalificacionService } from '../../core/services/calificacion.service';
-import { CalificacionRead } from '../../models/api.models';
+import { CalificacionResponse } from '../../models/api.models';
 import { CalificacionDialogComponent, CalificacionDialogData } from './calificacion-dialog';
 
 @Component({
@@ -32,14 +32,12 @@ export class CalificacionListComponent implements AfterViewInit {
   private readonly snack = inject(MatSnackBar);
 
   readonly displayedColumns = [
-    'estudiante',
-    'curso',
-    'periodo',
+    'id_estudiante',
+    'id_curso',
     'nota',
-    'observacion',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<CalificacionRead>([]);
+  readonly dataSource = new MatTableDataSource<CalificacionResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +68,7 @@ export class CalificacionListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: CalificacionRead): void {
+  editar(row: CalificacionResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,7 +80,7 @@ export class CalificacionListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: CalificacionRead): void {
+  eliminar(row: CalificacionResponse): void {
     if (!confirm(`¿Eliminar esta calificación?`)) return;
     this.svc.delete(row.id_calificacion).subscribe({
       next: () => {
