@@ -11,11 +11,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { UsuarioService } from '../../core/services/usuario.service';
-import { UsuarioRead } from '../../models/api.models';
+import { UsuarioResponse } from '../../models/api.models';
 
 export interface UsuarioDialogData {
   mode: 'create' | 'edit';
-  row?: UsuarioRead;
+  row?: UsuarioResponse;
 }
 
 @Component({
@@ -45,11 +45,11 @@ export class UsuarioDialogComponent {
 
   readonly form = this.fb.nonNullable.group({
     nombre: ['', Validators.required],
-    apellido: ['', Validators.required],
+    nombre_usuario: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: [''],
+    contrasena: [''],
     rol: ['', Validators.required],
-    estado: [true],
+    activo: [true],
   });
 
   constructor() {
@@ -57,16 +57,16 @@ export class UsuarioDialogComponent {
       const r = this.data.row;
       this.form.patchValue({
         nombre: r.nombre,
-        apellido: r.apellido,
+        nombre_usuario: r.nombre_usuario,
         email: r.email,
         rol: r.rol,
-        estado: r.estado,
+        activo: r.activo,
       });
-      this.form.get('password')?.clearValidators();
+      this.form.get('contrasena')?.clearValidators();
     } else {
-      this.form.get('password')?.setValidators(Validators.required);
+      this.form.get('contrasena')?.setValidators(Validators.required);
     }
-    this.form.get('password')?.updateValueAndValidity();
+    this.form.get('contrasena')?.updateValueAndValidity();
   }
 
   cancel(): void {
@@ -84,16 +84,16 @@ export class UsuarioDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
           nombre: v.nombre,
-          apellido: v.apellido,
+          nombre_usuario: v.nombre_usuario,
           email: v.email,
-          password: v.password,
+          contrasena: v.contrasena,
           rol: v.rol,
-          estado: v.estado,
-          id_usuario_creacion: uid,
+          activo: v.activo,
         })
         .subscribe({
           next: () => this.dialogRef.close(true),
@@ -102,14 +102,15 @@ export class UsuarioDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_usuario, {
         nombre: v.nombre,
-        apellido: v.apellido,
+        nombre_usuario: v.nombre_usuario,
         email: v.email,
         rol: v.rol,
-        estado: v.estado,
-        id_usuario_edita: uid,
+        activo: v.activo,
+        contrasena: null,
       })
       .subscribe({
         next: () => this.dialogRef.close(true),

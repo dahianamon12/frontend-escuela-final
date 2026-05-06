@@ -9,11 +9,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { CalificacionService } from '../../core/services/calificacion.service';
-import { CalificacionRead } from '../../models/api.models';
+import { CalificacionResponse } from '../../models/api.models';
 
 export interface CalificacionDialogData {
   mode: 'create' | 'edit';
-  row?: CalificacionRead;
+  row?: CalificacionResponse;
 }
 
 @Component({
@@ -38,22 +38,18 @@ export class CalificacionDialogComponent {
   readonly data = inject<CalificacionDialogData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.nonNullable.group({
-    id_estudiante: [0, [Validators.required, Validators.min(1)]],
-    id_curso: [0, [Validators.required, Validators.min(1)]],
-    periodo: ['', Validators.required],
-    nota: [0, [Validators.required, Validators.min(0), Validators.max(20)]],
-    observacion: [''],
+    id_estudiante: ['', Validators.required],
+    id_curso: ['', Validators.required],
+    nota: ['', Validators.required],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        id_estudiante: r.id_estudiante,
-        id_curso: r.id_curso,
-        periodo: r.periodo ?? '',
-        nota: r.nota,
-        observacion: r.observacion ?? '',
+        id_estudiante: r.id_estudiante ?? '',
+        id_curso: r.id_curso ?? '',
+        nota: r.nota ?? '',
       });
     }
   }
@@ -73,14 +69,13 @@ export class CalificacionDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
           id_estudiante: v.id_estudiante,
           id_curso: v.id_curso,
-          periodo: v.periodo,
           nota: v.nota,
-          observacion: v.observacion || null,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -90,13 +85,10 @@ export class CalificacionDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_calificacion, {
-        id_estudiante: v.id_estudiante,
-        id_curso: v.id_curso,
-        periodo: v.periodo,
-        nota: v.nota,
-        observacion: v.observacion || null,
+        nota: v.nota || null,
         id_usuario_edita: uid,
       })
       .subscribe({

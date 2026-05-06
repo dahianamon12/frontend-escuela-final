@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { DirectorService } from '../../core/services/director.service';
-import { DirectorRead } from '../../models/api.models';
+import { DirectorResponse } from '../../models/api.models';
 import { DirectorDialogComponent, DirectorDialogData } from './director-dialog';
 
 @Component({
@@ -32,15 +32,12 @@ export class DirectorListComponent implements AfterViewInit {
   private readonly snack = inject(MatSnackBar);
 
   readonly displayedColumns = [
-    'nombre',
-    'apellido',
-    'email',
+    'id_director',
+    'id_departamento',
     'telefono',
-    'fecha_inicio',
-    'estado',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<DirectorRead>([]);
+  readonly dataSource = new MatTableDataSource<DirectorResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -71,7 +68,7 @@ export class DirectorListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: DirectorRead): void {
+  editar(row: DirectorResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -83,8 +80,8 @@ export class DirectorListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: DirectorRead): void {
-    if (!confirm(`¿Eliminar director ${row.nombre} ${row.apellido}?`)) return;
+  eliminar(row: DirectorResponse): void {
+    if (!confirm(`¿Eliminar director ${row.id_director}?`)) return;
     this.svc.delete(row.id_director).subscribe({
       next: () => {
         this.snack.open('Director eliminado', 'OK', { duration: 3000 });

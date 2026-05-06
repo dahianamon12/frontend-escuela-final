@@ -5,16 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { DirectorService } from '../../core/services/director.service';
-import { DirectorRead } from '../../models/api.models';
+import { DirectorResponse } from '../../models/api.models';
 
 export interface DirectorDialogData {
   mode: 'create' | 'edit';
-  row?: DirectorRead;
+  row?: DirectorResponse;
 }
 
 @Component({
@@ -25,7 +24,6 @@ export interface DirectorDialogData {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './director-dialog.html',
@@ -40,25 +38,19 @@ export class DirectorDialogComponent {
   readonly data = inject<DirectorDialogData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.nonNullable.group({
-    nombre: ['', Validators.required],
-    apellido: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    id_usuario: ['', Validators.required],
+    id_departamento: ['', Validators.required],
     telefono: [''],
-    fecha_inicio: [''],
-    estado: [true],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        nombre: r.nombre,
-        apellido: r.apellido,
-        email: r.email,
+        id_departamento: r.id_departamento ?? '',
         telefono: r.telefono ?? '',
-        fecha_inicio: r.fecha_inicio ?? '',
-        estado: r.estado,
       });
+      this.form.get('id_usuario')?.disable();
     }
   }
 
@@ -77,15 +69,13 @@ export class DirectorDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
-          nombre: v.nombre,
-          apellido: v.apellido,
-          email: v.email,
-          telefono: v.telefono || null,
-          fecha_inicio: v.fecha_inicio || null,
-          estado: v.estado,
+          id_usuario: v.id_usuario,
+          id_departamento: v.id_departamento,
+          telefono: v.telefono,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -95,14 +85,11 @@ export class DirectorDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_director, {
-        nombre: v.nombre,
-        apellido: v.apellido,
-        email: v.email,
+        id_departamento: v.id_departamento || null,
         telefono: v.telefono || null,
-        fecha_inicio: v.fecha_inicio || null,
-        estado: v.estado,
         id_usuario_edita: uid,
       })
       .subscribe({

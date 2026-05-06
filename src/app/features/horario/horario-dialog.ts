@@ -6,16 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { HorarioService } from '../../core/services/horario.service';
-import { HorarioRead } from '../../models/api.models';
+import { HorarioResponse } from '../../models/api.models';
 
 export interface HorarioDialogData {
   mode: 'create' | 'edit';
-  row?: HorarioRead;
+  row?: HorarioResponse;
 }
 
 @Component({
@@ -27,7 +26,6 @@ export interface HorarioDialogData {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './horario-dialog.html',
@@ -47,19 +45,17 @@ export class HorarioDialogComponent {
     dia: ['', Validators.required],
     hora_inicio: ['', Validators.required],
     hora_fin: ['', Validators.required],
-    aula: [''],
-    estado: [true],
+    id_curso: ['', Validators.required],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        dia: r.dia,
-        hora_inicio: r.hora_inicio,
-        hora_fin: r.hora_fin,
-        aula: r.aula ?? '',
-        estado: r.estado,
+        dia: r.dia ?? '',
+        hora_inicio: r.hora_inicio ?? '',
+        hora_fin: r.hora_fin ?? '',
+        id_curso: r.id_curso ?? '',
       });
     }
   }
@@ -79,14 +75,14 @@ export class HorarioDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
           dia: v.dia,
           hora_inicio: v.hora_inicio,
           hora_fin: v.hora_fin,
-          aula: v.aula || null,
-          estado: v.estado,
+          id_curso: v.id_curso,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -96,13 +92,13 @@ export class HorarioDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_horario, {
         dia: v.dia,
         hora_inicio: v.hora_inicio,
         hora_fin: v.hora_fin,
-        aula: v.aula || null,
-        estado: v.estado,
+        id_curso: v.id_curso,
         id_usuario_edita: uid,
       })
       .subscribe({
