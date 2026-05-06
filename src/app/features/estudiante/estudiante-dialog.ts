@@ -5,16 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { EstudianteService } from '../../core/services/estudiante.service';
-import { EstudianteRead } from '../../models/api.models';
+import { EstudianteResponse } from '../../models/api.models';
 
 export interface EstudianteDialogData {
   mode: 'create' | 'edit';
-  row?: EstudianteRead;
+  row?: EstudianteResponse;
 }
 
 @Component({
@@ -25,7 +24,6 @@ export interface EstudianteDialogData {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './estudiante-dialog.html',
@@ -40,27 +38,23 @@ export class EstudianteDialogComponent {
   readonly data = inject<EstudianteDialogData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.nonNullable.group({
-    nombre: ['', Validators.required],
-    apellido: ['', Validators.required],
-    codigo: ['', Validators.required],
+    id_usuario: ['', Validators.required],
+    id_grado: ['', Validators.required],
     fecha_nacimiento: [''],
     direccion: [''],
     telefono: [''],
-    estado: [true],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        nombre: r.nombre,
-        apellido: r.apellido,
-        codigo: r.codigo,
+        id_grado: r.id_grado ?? '',
         fecha_nacimiento: r.fecha_nacimiento ?? '',
         direccion: r.direccion ?? '',
         telefono: r.telefono ?? '',
-        estado: r.estado,
       });
+      this.form.get('id_usuario')?.disable();
     }
   }
 
@@ -79,16 +73,15 @@ export class EstudianteDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
-          nombre: v.nombre,
-          apellido: v.apellido,
-          codigo: v.codigo,
+          id_usuario: v.id_usuario,
+          id_grado: v.id_grado,
           fecha_nacimiento: v.fecha_nacimiento || null,
           direccion: v.direccion || null,
           telefono: v.telefono || null,
-          estado: v.estado,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -98,15 +91,13 @@ export class EstudianteDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_estudiante, {
-        nombre: v.nombre,
-        apellido: v.apellido,
-        codigo: v.codigo,
+        id_grado: v.id_grado || null,
         fecha_nacimiento: v.fecha_nacimiento || null,
         direccion: v.direccion || null,
         telefono: v.telefono || null,
-        estado: v.estado,
         id_usuario_edita: uid,
       })
       .subscribe({

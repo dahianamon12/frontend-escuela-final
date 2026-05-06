@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { GradoService } from '../../core/services/grado.service';
-import { GradoRead } from '../../models/api.models';
+import { GradoResponse } from '../../models/api.models';
 import { GradoDialogComponent, GradoDialogData } from './grado-dialog';
 
 @Component({
@@ -32,14 +32,12 @@ export class GradoListComponent implements AfterViewInit {
   private readonly snack = inject(MatSnackBar);
 
   readonly displayedColumns = [
-    'nombre',
+    'nombre_grado',
     'nivel',
-    'seccion',
-    'anio_escolar',
-    'estado',
+    'jornada',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<GradoRead>([]);
+  readonly dataSource = new MatTableDataSource<GradoResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +68,7 @@ export class GradoListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: GradoRead): void {
+  editar(row: GradoResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,8 +80,8 @@ export class GradoListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: GradoRead): void {
-    if (!confirm(`¿Eliminar grado ${row.nombre}?`)) return;
+  eliminar(row: GradoResponse): void {
+    if (!confirm(`¿Eliminar grado ${row.nombre_grado}?`)) return;
     this.svc.delete(row.id_grado).subscribe({
       next: () => {
         this.snack.open('Grado eliminado', 'OK', { duration: 3000 });

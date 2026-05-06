@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { CursoService } from '../../core/services/curso.service';
-import { CursoRead } from '../../models/api.models';
+import { CursoResponse } from '../../models/api.models';
 import { CursoDialogComponent, CursoDialogData } from './curso-dialog';
 
 @Component({
@@ -32,14 +32,15 @@ export class CursoListComponent implements AfterViewInit {
   private readonly snack = inject(MatSnackBar);
 
   readonly displayedColumns = [
-    'nombre',
-    'codigo',
+    'nombre_curso',
     'descripcion',
-    'creditos',
-    'estado',
+    'horas_semanales',
+    'id_profesor',
+    'id_grado',
+    'id_aula',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<CursoRead>([]);
+  readonly dataSource = new MatTableDataSource<CursoResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +71,7 @@ export class CursoListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: CursoRead): void {
+  editar(row: CursoResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,8 +83,8 @@ export class CursoListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: CursoRead): void {
-    if (!confirm(`¿Eliminar curso ${row.nombre}?`)) return;
+  eliminar(row: CursoResponse): void {
+    if (!confirm(`¿Eliminar curso ${row.nombre_curso}?`)) return;
     this.svc.delete(row.id_curso).subscribe({
       next: () => {
         this.snack.open('Curso eliminado', 'OK', { duration: 3000 });

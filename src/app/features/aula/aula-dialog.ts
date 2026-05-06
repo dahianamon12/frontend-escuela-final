@@ -5,16 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { AulaService } from '../../core/services/aula.service';
-import { AulaRead } from '../../models/api.models';
+import { AulaResponse } from '../../models/api.models';
 
 export interface AulaDialogData {
   mode: 'create' | 'edit';
-  row?: AulaRead;
+  row?: AulaResponse;
 }
 
 @Component({
@@ -25,7 +24,6 @@ export interface AulaDialogData {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './aula-dialog.html',
@@ -40,22 +38,18 @@ export class AulaDialogComponent {
   readonly data = inject<AulaDialogData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.nonNullable.group({
-    nombre: ['', Validators.required],
-    codigo: ['', Validators.required],
-    capacidad: [0, [Validators.required, Validators.min(1)]],
-    ubicacion: [''],
-    estado: [true],
+    numero_aula: ['', Validators.required],
+    capacidad: ['', Validators.required],
+    edificio: [''],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        nombre: r.nombre,
-        codigo: r.codigo,
-        capacidad: r.capacidad,
-        ubicacion: r.ubicacion ?? '',
-        estado: r.estado,
+        numero_aula: r.numero_aula,
+        capacidad: r.capacidad ?? '',
+        edificio: r.edificio ?? '',
       });
     }
   }
@@ -75,14 +69,13 @@ export class AulaDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
-          nombre: v.nombre,
-          codigo: v.codigo,
+          numero_aula: v.numero_aula,
           capacidad: v.capacidad,
-          ubicacion: v.ubicacion || null,
-          estado: v.estado,
+          edificio: v.edificio,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -92,13 +85,12 @@ export class AulaDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_aula, {
-        nombre: v.nombre,
-        codigo: v.codigo,
-        capacidad: v.capacidad,
-        ubicacion: v.ubicacion || null,
-        estado: v.estado,
+        numero_aula: v.numero_aula || null,
+        capacidad: v.capacidad || null,
+        edificio: v.edificio || null,
         id_usuario_edita: uid,
       })
       .subscribe({

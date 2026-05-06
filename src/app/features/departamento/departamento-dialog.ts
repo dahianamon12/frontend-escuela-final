@@ -5,16 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { DepartamentoService } from '../../core/services/departamento.service';
-import { DepartamentoRead } from '../../models/api.models';
+import { DepartamentoResponse } from '../../models/api.models';
 
 export interface DepartamentoDialogData {
   mode: 'create' | 'edit';
-  row?: DepartamentoRead;
+  row?: DepartamentoResponse;
 }
 
 @Component({
@@ -25,7 +24,6 @@ export interface DepartamentoDialogData {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './departamento-dialog.html',
@@ -41,8 +39,8 @@ export class DepartamentoDialogComponent {
 
   readonly form = this.fb.nonNullable.group({
     nombre: ['', Validators.required],
-    descripcion: [''],
-    estado: [true],
+    telefono: [''],
+    oficina: [''],
   });
 
   constructor() {
@@ -50,8 +48,8 @@ export class DepartamentoDialogComponent {
       const r = this.data.row;
       this.form.patchValue({
         nombre: r.nombre,
-        descripcion: r.descripcion ?? '',
-        estado: r.estado,
+        telefono: r.telefono ?? '',
+        oficina: r.oficina ?? '',
       });
     }
   }
@@ -71,12 +69,13 @@ export class DepartamentoDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
           nombre: v.nombre,
-          descripcion: v.descripcion || null,
-          estado: v.estado,
+          telefono: v.telefono,
+          oficina: v.oficina,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -86,11 +85,12 @@ export class DepartamentoDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_departamento, {
-        nombre: v.nombre,
-        descripcion: v.descripcion || null,
-        estado: v.estado,
+        nombre: v.nombre || null,
+        telefono: v.telefono || null,
+        oficina: v.oficina || null,
         id_usuario_edita: uid,
       })
       .subscribe({

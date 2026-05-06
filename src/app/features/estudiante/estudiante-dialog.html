@@ -1,17 +1,15 @@
 <h2 mat-dialog-title>{{ data.mode === 'create' ? 'Nuevo estudiante' : 'Editar estudiante' }}</h2>
 <mat-dialog-content class="dialog-body">
   <form [formGroup]="form" class="grid">
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Apellido</mat-label>
-      <input matInput formControlName="apellido" />
-    </mat-form-field>
+    @if (data.mode === 'create') {
+      <mat-form-field appearance="outline" class="span-2">
+        <mat-label>ID Usuario</mat-label>
+        <input matInput formControlName="id_usuario" />
+      </mat-form-field>
+    }
     <mat-form-field appearance="outline" class="span-2">
-      <mat-label>Código</mat-label>
-      <input matInput formControlName="codigo" />
+      <mat-label>ID Grado</mat-label>
+      <input matInput formControlName="id_grado" />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Fecha de Nacimiento</mat-label>
@@ -25,7 +23,6 @@
       <mat-label>Dirección</mat-label>
       <textarea matInput rows="2" formControlName="direccion"></textarea>
     </mat-form-field>
-    <mat-slide-toggle formControlName="estado" class="span-2">Activo</mat-slide-toggle>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

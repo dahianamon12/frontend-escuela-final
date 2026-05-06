@@ -5,16 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuditContextService } from '../../core/audit-context.service';
 import { ProfesorService } from '../../core/services/profesor.service';
-import { ProfesorRead } from '../../models/api.models';
+import { ProfesorResponse } from '../../models/api.models';
 
 export interface ProfesorDialogData {
   mode: 'create' | 'edit';
-  row?: ProfesorRead;
+  row?: ProfesorResponse;
 }
 
 @Component({
@@ -25,7 +24,6 @@ export interface ProfesorDialogData {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
   ],
   templateUrl: './profesor-dialog.html',
@@ -40,25 +38,20 @@ export class ProfesorDialogComponent {
   readonly data = inject<ProfesorDialogData>(MAT_DIALOG_DATA);
 
   readonly form = this.fb.nonNullable.group({
-    nombre: ['', Validators.required],
-    apellido: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    especialidad: [''],
-    telefono: [''],
-    estado: [true],
+    id_usuario: ['', Validators.required],
+    id_departamento: ['', Validators.required],
+    especialidad: ['', Validators.required],
   });
 
   constructor() {
     if (this.data.mode === 'edit' && this.data.row) {
       const r = this.data.row;
       this.form.patchValue({
-        nombre: r.nombre,
-        apellido: r.apellido,
-        email: r.email,
+        id_departamento: r.id_departamento ?? '',
         especialidad: r.especialidad ?? '',
-        telefono: r.telefono ?? '',
-        estado: r.estado,
       });
+      // id_usuario no se edita
+      this.form.get('id_usuario')?.disable();
     }
   }
 
@@ -77,15 +70,13 @@ export class ProfesorDialogComponent {
       return;
     }
     const v = this.form.getRawValue();
+
     if (this.data.mode === 'create') {
       this.svc
         .create({
-          nombre: v.nombre,
-          apellido: v.apellido,
-          email: v.email,
-          especialidad: v.especialidad || null,
-          telefono: v.telefono || null,
-          estado: v.estado,
+          id_usuario: v.id_usuario,
+          id_departamento: v.id_departamento,
+          especialidad: v.especialidad,
           id_usuario_creacion: uid,
         })
         .subscribe({
@@ -95,14 +86,11 @@ export class ProfesorDialogComponent {
         });
       return;
     }
+
     this.svc
       .update(this.data.row!.id_profesor, {
-        nombre: v.nombre,
-        apellido: v.apellido,
-        email: v.email,
-        especialidad: v.especialidad || null,
-        telefono: v.telefono || null,
-        estado: v.estado,
+        id_departamento: v.id_departamento,
+        especialidad: v.especialidad,
         id_usuario_edita: uid,
       })
       .subscribe({

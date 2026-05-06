@@ -1,0 +1,170 @@
+.shell {
+  height: 100vh;
+  --nav-expanded: 268px;
+  --nav-collapsed: 76px;
+  --nav-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --nav-duration: 320ms;
+}
+
+/* Ajuste de transición del contenido */
+.shell.mat-drawer-transition .mat-drawer-content {
+  transition-duration: var(--nav-duration);
+  transition-timing-function: var(--nav-ease);
+}
+
+/* 🔷 SIDEBAR */
+.nav-rail {
+  width: var(--nav-expanded);
+  max-width: var(--nav-expanded);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--nav-duration) var(--nav-ease);
+  border-right: 1px solid #ddd;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.nav-rail.collapsed {
+  width: var(--nav-collapsed);
+  max-width: var(--nav-collapsed);
+}
+
+/* 🔷 BRAND */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.nav-brand__mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #3f51b5;
+}
+
+.nav-brand__icon {
+  color: white;
+}
+
+.nav-brand__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-brand__title {
+  font-weight: 600;
+}
+
+.nav-brand__sub {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 🔷 MENÚ */
+.nav-list {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.nav-item {
+  margin: 4px 10px;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.nav-item:hover {
+  background: rgba(63, 81, 181, 0.1);
+}
+
+.active-link {
+  background: rgba(63, 81, 181, 0.2);
+  font-weight: 600;
+}
+
+.nav-item__icon {
+  color: #666;
+}
+
+.active-link .nav-item__icon {
+  color: #3f51b5;
+}
+
+.nav-label {
+  margin-left: 8px;
+}
+
+.nav-rail.collapsed .nav-label {
+  display: none;
+}
+
+/* 🔷 FOOTER */
+.nav-footer {
+  padding: 12px;
+}
+
+.collapse-btn {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* 🔷 MAIN */
+.main-column {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+/* 🔷 TOPBAR */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: #3f51b5 !important;
+  color: white !important;
+}
+
+.menu-toggle {
+  color: white;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* 🔷 AUDIT SELECT */
+.audit-field {
+  width: 200px;
+  margin-right: 10px;
+}
+
+/* 🔷 CONTENT */
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.content-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 🔷 RESPONSIVE */
+@media (max-width: 768px) {
+  .nav-rail {
+    width: 220px;
+  }
+
+  .audit-field {
+    display: none;
+  }
+}

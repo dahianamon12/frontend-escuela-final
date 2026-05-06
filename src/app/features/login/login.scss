@@ -1,0 +1,35 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f5f7fa;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.full {
+  width: 100%;
+}
+
+.submit-btn {
+  margin-top: 10px;
+  border-radius: 10px;
+}

@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { EstudianteService } from '../../core/services/estudiante.service';
-import { EstudianteRead } from '../../models/api.models';
+import { EstudianteResponse } from '../../models/api.models';
 import { EstudianteDialogComponent, EstudianteDialogData } from './estudiante-dialog';
 
 @Component({
@@ -32,14 +32,14 @@ export class EstudianteListComponent implements AfterViewInit {
   private readonly snack = inject(MatSnackBar);
 
   readonly displayedColumns = [
-    'nombre',
-    'apellido',
-    'codigo',
+    'id_estudiante',
+    'id_grado',
     'fecha_nacimiento',
-    'estado',
+    'direccion',
+    'telefono',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<EstudianteRead>([]);
+  readonly dataSource = new MatTableDataSource<EstudianteResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +70,7 @@ export class EstudianteListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: EstudianteRead): void {
+  editar(row: EstudianteResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,8 +82,8 @@ export class EstudianteListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: EstudianteRead): void {
-    if (!confirm(`¿Eliminar estudiante ${row.nombre} ${row.apellido}?`)) return;
+  eliminar(row: EstudianteResponse): void {
+    if (!confirm(`¿Eliminar estudiante ${row.id_estudiante}?`)) return;
     this.svc.delete(row.id_estudiante).subscribe({
       next: () => {
         this.snack.open('Estudiante eliminado', 'OK', { duration: 3000 });

@@ -7,41 +7,39 @@
 </div>
 
 @if (loading) {
-  <div class="loading">
-    <mat-spinner />
-  </div>
+  <div class="loading"><mat-spinner /></div>
 } @else {
   <div class="table-wrap mat-elevation-z2">
     <table mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="nombre">
+      <ng-container matColumnDef="nombre_curso">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
-        <td mat-cell *matCellDef="let r">{{ r.nombre }}</td>
-      </ng-container>
-      <ng-container matColumnDef="codigo">
-        <th mat-header-cell *matHeaderCellDef>Código</th>
-        <td mat-cell *matCellDef="let r">{{ r.codigo }}</td>
+        <td mat-cell *matCellDef="let r">{{ r.nombre_curso }}</td>
       </ng-container>
       <ng-container matColumnDef="descripcion">
         <th mat-header-cell *matHeaderCellDef>Descripción</th>
         <td mat-cell *matCellDef="let r">{{ r.descripcion || '—' }}</td>
       </ng-container>
-      <ng-container matColumnDef="creditos">
-        <th mat-header-cell *matHeaderCellDef>Créditos</th>
-        <td mat-cell *matCellDef="let r">{{ r.creditos ?? '—' }}</td>
+      <ng-container matColumnDef="horas_semanales">
+        <th mat-header-cell *matHeaderCellDef>Horas Semanales</th>
+        <td mat-cell *matCellDef="let r">{{ r.horas_semanales || '—' }}</td>
       </ng-container>
-      <ng-container matColumnDef="estado">
-        <th mat-header-cell *matHeaderCellDef>Estado</th>
-        <td mat-cell *matCellDef="let r">{{ r.estado ? 'Activo' : 'Inactivo' }}</td>
+      <ng-container matColumnDef="id_profesor">
+        <th mat-header-cell *matHeaderCellDef>Profesor</th>
+        <td mat-cell *matCellDef="let r">{{ r.id_profesor || '—' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="id_grado">
+        <th mat-header-cell *matHeaderCellDef>Grado</th>
+        <td mat-cell *matCellDef="let r">{{ r.id_grado || '—' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="id_aula">
+        <th mat-header-cell *matHeaderCellDef>Aula</th>
+        <td mat-cell *matCellDef="let r">{{ r.id_aula || '—' }}</td>
       </ng-container>
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let r" class="actions">
-          <button mat-icon-button type="button" (click)="editar(r)" aria-label="Editar">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button type="button" (click)="eliminar(r)" aria-label="Eliminar">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <button mat-icon-button type="button" (click)="editar(r)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button type="button" (click)="eliminar(r)"><mat-icon>delete</mat-icon></button>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

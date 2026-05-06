@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { filter } from 'rxjs/operators';
 
 import { AsistenciaService } from '../../core/services/asistencia.service';
-import { AsistenciaRead } from '../../models/api.models';
+import { AsistenciaResponse } from '../../models/api.models';
 import { AsistenciaDialogComponent, AsistenciaDialogData } from './asistencia-dialog';
 
 @Component({
@@ -33,13 +33,12 @@ export class AsistenciaListComponent implements AfterViewInit {
 
   readonly displayedColumns = [
     'fecha',
-    'estudiante',
-    'curso',
-    'estado_asistencia',
-    'observacion',
+    'id_estudiante',
+    'id_curso',
+    'estado',
     'acciones',
   ];
-  readonly dataSource = new MatTableDataSource<AsistenciaRead>([]);
+  readonly dataSource = new MatTableDataSource<AsistenciaResponse>([]);
   loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,7 +69,7 @@ export class AsistenciaListComponent implements AfterViewInit {
     this.open({ mode: 'create' });
   }
 
-  editar(row: AsistenciaRead): void {
+  editar(row: AsistenciaResponse): void {
     this.open({ mode: 'edit', row });
   }
 
@@ -82,7 +81,7 @@ export class AsistenciaListComponent implements AfterViewInit {
       .subscribe(() => this.reload());
   }
 
-  eliminar(row: AsistenciaRead): void {
+  eliminar(row: AsistenciaResponse): void {
     if (!confirm(`¿Eliminar este registro de asistencia?`)) return;
     this.svc.delete(row.id_asistencia).subscribe({
       next: () => {
